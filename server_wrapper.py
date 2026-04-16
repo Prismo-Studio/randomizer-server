@@ -23,7 +23,7 @@ SEEDS_DIR = Path("/app/seeds")
 SEEDS_DIR.mkdir(exist_ok=True)
 
 PORT_WS = int(os.environ.get("AP_PORT", "38281"))
-PORT_HTTP = int(os.environ.get("HTTP_PORT", "8080"))
+PORT_HTTP = int(os.environ.get("PORT", os.environ.get("HTTP_PORT", "8080")))
 
 server_process: subprocess.Popen | None = None
 server_seed: str | None = None
