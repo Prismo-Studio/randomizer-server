@@ -11,6 +11,8 @@ COPY . .
 
 RUN mkdir -p /app/seeds
 
+ENV SKIP_REQUIREMENTS_UPDATE=1
+
 EXPOSE 8080 38281
 
 CMD ["python", "server_wrapper.py"]

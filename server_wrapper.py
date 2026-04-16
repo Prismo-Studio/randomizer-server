@@ -55,6 +55,7 @@ def start_server(seed_path: str):
         "--port", str(PORT_WS),
         "--loglevel", "info",
     ]
+    env = {**os.environ, "SKIP_REQUIREMENTS_UPDATE": "1", "PYTHONIOENCODING": "utf-8"}
     server_process = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,
@@ -62,6 +63,7 @@ def start_server(seed_path: str):
         stdin=subprocess.DEVNULL,
         text=True,
         cwd="/app",
+        env=env,
     )
     server_seed = Path(seed_path).name
     threading.Thread(target=read_output, args=(server_process,), daemon=True).start()
