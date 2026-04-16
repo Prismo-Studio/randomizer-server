@@ -9,6 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 38281
+RUN mkdir -p /app/seeds
 
-CMD ["python", "MultiServer.py", "--port", "38281"]
+EXPOSE 8080 38281
+
+CMD ["python", "server_wrapper.py"]
