@@ -31,18 +31,18 @@ server_log: list[str] = []
 log_lock = threading.Lock()
 
 
-def read_output(proc):
-    """Drain stdout/stderr into server_log."""
-    for stream in [proc.stdout, proc.stderr]:
-        if stream is None:
-            continue
-        for line in iter(stream.readline, ""):
-            line = line.strip()
-            if line:
-                with log_lock:
-                    server_log.append(line)
-                    if len(server_log) > 200:
-                        del server_log[:100]
+def _drain_stream(stream, prefix=""):
+    """Drain a single stream into server_log."""
+    if stream is None:
+        return
+    for line in iter(stream.readline, ""):
+        line = line.strip()
+        if line:
+            entry = f"{prefix}{line}" if prefix else line
+            with log_lock:
+                server_log.append(entry)
+                if len(server_log) > 200:
+                    del server_log[:100]
 
 
 def start_server(seed_path: str):
@@ -66,7 +66,8 @@ def start_server(seed_path: str):
         env=env,
     )
     server_seed = Path(seed_path).name
-    threading.Thread(target=read_output, args=(server_process,), daemon=True).start()
+    threading.Thread(target=_drain_stream, args=(server_process.stdout,), daemon=True).start()
+    threading.Thread(target=_drain_stream, args=(server_process.stderr, "[err] "), daemon=True).start()
 
 
 def stop_server():
