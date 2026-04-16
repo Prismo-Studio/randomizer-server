@@ -1,0 +1,11 @@
+app = "zephyr-archipelago"
+primary_region = "cdg"
+
+[build]
+
+[[services]]
+  internal_port = 38281
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 38281
