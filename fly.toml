@@ -1,7 +1,17 @@
 app = "randomizer-server"
 primary_region = "cdg"
+kill_signal = "SIGTERM"
+kill_timeout = "5s"
 
 [build]
+
+[env]
+  SKIP_REQUIREMENTS_UPDATE = "1"
+  PYTHONDONTWRITEBYTECODE = "1"
+
+# Keep the machine running, don't auto-suspend
+[restart]
+  policy = "always"
 
 [checks]
   [checks.health]
